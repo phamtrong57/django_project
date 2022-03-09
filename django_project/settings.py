@@ -25,12 +25,13 @@ SECRET_KEY = 'django-insecure-3^!=jt=r-3esf)9=83f2^*@9em+$v*4%eaawhr7et&qp5%ckwt
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['phamtrongdjangoapp.herokuapp.com']
+ALLOWED_HOSTS = ['phamtrongdjangoapp.herokuapp.com','127.0.0.1']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    # 'phamtrongblog',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,7 +55,7 @@ ROOT_URLCONF = 'django_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['/Users/phamtrongdev/django_project/phamtrongblog/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -1,0 +1,99 @@
+---------django web-----------
+1. setup enviroment
+    1. create venv
+    mkdir foldername
+    python3 -m venv venv
+    
+    2. install django
+    pip3 install django
+
+    3. create project and app(page)
+    django-admin startproject projectname
+    cd projectname | python3 manage.py -m startapp appname
+
+    3. workplace stucture
+    foldername
+        manage.py
+        appname
+            ------
+        foldername
+            ----
+
+2. deloyping django application on apache server
+    1.cd /etc/apache2/sites-available/ 
+    2.create new conf file
+        sudo vi djangoproject.conf
+        ------djangoproject.conf--------
+        <VirtualHost *:80>
+        #server setting
+        ServerAdmin admin@djangoproject.localhost
+        
+        ServerName djangoproject.localhost #host ex: 192.168.0.11 or localhost
+        ServerAlias www.djangoproject.localhost
+
+        #path setting
+        DocumentRoot /home/pi/djangproject
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomeLog ${APACHE_LOG_DIR}/access.log combined
+        
+        #website folder setting
+        Alias /static /home/pi/djangoproject/static
+        <Directory /home/pi/djangproject/static>
+            Require all granted
+        </Directory>
+        
+        Alias /static /home/pi/djangoproject/media
+        <Directory /home/pi/djangoproject/media>
+            Require all granted
+        </Directory>
+
+        <Directory /home/pi/djangoproject/my_django_project>
+            <Files wsgi.py>
+                Require all granted
+            </Files>
+        </VirtualHost>
+
+        #setting wsgi
+        WSGIDeamondProcess django_project python-path=/home/pi/djangproject python-home=/home/pi/djangoproject/env
+        WSGIProcessGroup django_project
+        WSGIScriptAlias / /home/pi/djangoproject/my_django_project/wsgi.py
+    
+    3. enable virtual host
+        sudo a2ensite djangoproject.conf
+    3.1 give permissions for database
+        sudo chmod 664 /home/pi/djangoproject/db.sqlite3
+        sudo chown :www-data /home/pi/djangoproject/db.sqlite3
+    4. debug all settings
+        sudo apache2ctl configtest
+    5. restart apache server
+        sudo service apache2 restart  
+    6. adding allowed host
+        cd djangproject
+        vi my_django_project/settings.py
+        ---append our host to ALLOWED_HOST = ['host']
+3. modify page
+    1. create new urls.py inside target page foldername
+        touch urls.py
+    
+    2. create a new function in views.py
+        def funcname(request):
+            ---------
+            return HttpRespone("text")
+    
+    3. append path in appname/urls.py to access the functions were created inside views.py
+        from django.urls import path
+        from . import views
+
+        urlpatterns = [
+            path('route',views.funcname)
+        ]
+    
+    4. append appname(page) to projectname/urls.py
+        from django.urls import include
+
+        urlpatterns = [
+            ------
+            path('appname', include(appname.urls))
+        ]
+    
+    5. use template to render html file <DjangoTemplates>
