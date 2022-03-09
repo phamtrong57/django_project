@@ -97,3 +97,17 @@
         ]
     
     5. use template to render html file <DjangoTemplates>
+        1. import django.template.loader in views.py
+            from django.template import loader
+        2. append template dir in TEMPLATES of djangoproject/settings.py
+            TEMPLATES=[
+                ....
+                DIRS = [os.path.join(BASE_DIR,'appname/templates)']
+            ]
+
+    6. use parameter in template
+        1. put {{ data }} in html source code
+            ex: <h1> hello, {{ name }} </h1>
+        2. add data into respone in views.py
+            data = {'name':'data'}
+        
